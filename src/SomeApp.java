@@ -18,15 +18,16 @@ public class SomeApp {
     }
 
     private static void readByte() throws IOException {
+        boolean endOfFile = false;
         try (ObjectInputStream objectInputStream = new ObjectInputStream(new BufferedInputStream(new FileInputStream("data.dat")))) {
-            Location tempLocation;
-            while ((tempLocation = (Location) objectInputStream.readObject()) != null) {
+            while (!endOfFile) {
+                Location tempLocation = (Location) objectInputStream.readObject();
                 locations1.put(tempLocation.getLocationID(), tempLocation);
             }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (EOFException e) {
-            System.out.print("");
+            endOfFile = true;
         } finally {
             for (Location location : locations1.values()) {
                 System.out.println(location.getLocationID() + "," + location.getDescription());
