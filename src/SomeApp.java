@@ -22,11 +22,13 @@ public class SomeApp {
         boolean endOfFile = false;
         try (ObjectInputStream objectInputStream = new ObjectInputStream(new BufferedInputStream(Files.newInputStream(filePath)))) {
             while (!endOfFile) {
-                Location tempLocation = (Location) objectInputStream.readObject();
-                System.out.println(tempLocation.getDescription());
+                try {
+                    Location tempLocation = (Location) objectInputStream.readObject();
+                    System.out.println(tempLocation.getDescription());
+                } catch (EOFException e) {
+                    endOfFile = true;
+                }
             }
-        } catch (EOFException e) {
-            endOfFile = true;
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
