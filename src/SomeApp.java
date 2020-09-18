@@ -18,24 +18,24 @@ public class SomeApp {
     }
 
     private static void readByte() throws IOException {
-        try (ObjectInputStream objectInputStream = new ObjectInputStream(new BufferedInputStream(new FileInputStream("data.dat")))){
+        try (ObjectInputStream objectInputStream = new ObjectInputStream(new BufferedInputStream(new FileInputStream("data.dat")))) {
             Location tempLocation;
             while ((tempLocation = (Location) objectInputStream.readObject()) != null) {
                 locations1.put(tempLocation.getLocationID(), tempLocation);
             }
-        }catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
-        }catch (EOFException e) {
+        } catch (EOFException e) {
             System.out.print("");
-        }finally {
+        } finally {
             for (Location location : locations1.values()) {
-                System.out.println(location.getLocationID()+ ","+ location.getDescription());
+                System.out.println(location.getLocationID() + "," + location.getDescription());
             }
         }
     }
 
     private static void writeByte() throws IOException {
-        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream("data.dat")))){
+        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream("data.dat")))) {
             for (Location location : locations.values()) {
                 objectOutputStream.writeObject(location);
             }
@@ -43,21 +43,21 @@ public class SomeApp {
     }
 
     private static void read() throws IOException {
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader("locations.txt"))){
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader("locations.txt"))) {
             String input;
             while ((input = bufferedReader.readLine()) != null) {
                 String[] inputArr = input.split(",");
                 int id = Integer.parseInt(inputArr[0]);
                 String description = inputArr[1];
-                System.out.println("ID: "+id+", Description: "+ description);
+                System.out.println("ID: " + id + ", Description: " + description);
             }
         }
     }
 
-    private static void write () throws IOException {
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("locations.txt"))){
+    private static void write() throws IOException {
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("locations.txt"))) {
             for (Location location : locations.values()) {
-                bufferedWriter.write(location.getLocationID()+","+location.getDescription()+"\n");
+                bufferedWriter.write(location.getLocationID() + "," + location.getDescription() + "\n");
             }
         }
     }

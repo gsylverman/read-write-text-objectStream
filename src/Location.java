@@ -1,6 +1,6 @@
 import java.io.Serializable;
 
-public class Location  implements Serializable {
+public class Location implements Serializable {
     private final long serialVersionUID = 5964081730602145278L;
     private int locationID;
     private String description;
