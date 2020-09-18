@@ -20,7 +20,7 @@ public class SomeApp {
     private static void read() {
         Path filePath = FileSystems.getDefault().getPath("data.dat");
         boolean endOfFile = false;
-        try (ObjectInputStream objectInputStream = new ObjectInputStream(Files.newInputStream(filePath))) {
+        try (ObjectInputStream objectInputStream = new ObjectInputStream(new BufferedInputStream(Files.newInputStream(filePath)))) {
             while (!endOfFile) {
                 Location tempLocation = (Location) objectInputStream.readObject();
                 System.out.println(tempLocation.getDescription());
@@ -37,7 +37,7 @@ public class SomeApp {
     private static void write() {
         Path filePath = FileSystems.getDefault().getPath("data.dat");
 
-        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(Files.newOutputStream(filePath))) {
+        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new BufferedOutputStream(Files.newOutputStream(filePath)))) {
             for (Location location : locations.values()) {
                 objectOutputStream.writeObject(location);
             }
