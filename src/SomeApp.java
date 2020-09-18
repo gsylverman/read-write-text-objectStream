@@ -13,7 +13,7 @@ public class SomeApp {
         locations.put(3, new Location(3, "Swimming in the river"));
         locations.put(4, new Location(4, "Lost in the forest"));
         locations.put(5, new Location(5, "At home"));
-//        writeByte();
+
         readByte();
     }
 
