@@ -1,65 +1,48 @@
 import java.io.*;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
 public class SomeApp {
-
     private static Map<Integer, Location> locations = new HashMap<>();
-    private static Map<Integer, Location> locations1 = new HashMap<>();
 
-    public static void main(String[] args) throws IOException {
-        locations.put(1, new Location(1, "In the road"));
-        locations.put(2, new Location(2, "On the mountain"));
-        locations.put(3, new Location(3, "Swimming in the river"));
-        locations.put(4, new Location(4, "Lost in the forest"));
-        locations.put(5, new Location(5, "At home"));
-
-        readByte();
+    public static void main(String[] args) {
+        locations.put(1, new Location(1, "At home"));
+        locations.put(2, new Location(2, "Lost in the forest"));
+        locations.put(3, new Location(3, "Climbing the mountain"));
+        locations.put(4, new Location(4, "Swimming in the river"));
+        read();
     }
 
-    private static void readByte() throws IOException {
+    //READ AND WRITE WITH NIO
+    private static void read() {
+        Path filePath = FileSystems.getDefault().getPath("data.dat");
         boolean endOfFile = false;
-        try (ObjectInputStream objectInputStream = new ObjectInputStream(new BufferedInputStream(new FileInputStream("data.dat")))) {
+        try (ObjectInputStream objectInputStream = new ObjectInputStream(Files.newInputStream(filePath))) {
             while (!endOfFile) {
                 Location tempLocation = (Location) objectInputStream.readObject();
-                locations1.put(tempLocation.getLocationID(), tempLocation);
+                System.out.println(tempLocation.getDescription());
             }
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         } catch (EOFException e) {
             endOfFile = true;
-        } finally {
-            for (Location location : locations1.values()) {
-                System.out.println(location.getLocationID() + "," + location.getDescription());
-            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
-    private static void writeByte() throws IOException {
-        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream("data.dat")))) {
+    private static void write() {
+        Path filePath = FileSystems.getDefault().getPath("data.dat");
+
+        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(Files.newOutputStream(filePath))) {
             for (Location location : locations.values()) {
                 objectOutputStream.writeObject(location);
             }
-        }
-    }
-
-    private static void read() throws IOException {
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader("locations.txt"))) {
-            String input;
-            while ((input = bufferedReader.readLine()) != null) {
-                String[] inputArr = input.split(",");
-                int id = Integer.parseInt(inputArr[0]);
-                String description = inputArr[1];
-                System.out.println("ID: " + id + ", Description: " + description);
-            }
-        }
-    }
-
-    private static void write() throws IOException {
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("locations.txt"))) {
-            for (Location location : locations.values()) {
-                bufferedWriter.write(location.getLocationID() + "," + location.getDescription() + "\n");
-            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
